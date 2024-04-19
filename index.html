@@ -7,18 +7,23 @@
         body {
             font-family: Arial, sans-serif;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            flex-direction: row;
             justify-content: center;
+            align-items: center;
             height: 100vh;
             margin: 0;
             padding: 20px;
             background-color: #f4f4f4;
         }
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
         #lottoNumbers {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px; /* 버튼과 번호 사이의 간격을 추가 */
+            margin-bottom: 40px; /* 간격을 40px로 조정 */
         }
         .number {
             width: 50px;
@@ -30,27 +35,40 @@
             font-size: 20px;
             font-weight: bold;
             color: white;
+            animation: pop-in 0.5s ease-out forwards;
         }
-        #history {
-            width: 100%;
+        #history, #winningNumbers {
+            width: 300px;
             display: flex;
             flex-direction: column;
             align-items: center;
             margin-top: 20px;
+            margin-left: 20px;
         }
-        .history-entry {
+        .history-entry, .winning-entry {
             margin-top: 5px;
+        }
+        @keyframes pop-in {
+            0% { transform: scale(0); }
+            85% { transform: scale(1.25); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
 <body>
-    <div>
+    <div class="content">
         <button onclick="generateLottoNumbers()">로또 번호 생성</button>
         <div id="lottoNumbers"></div>
+        <div id="history"></div>
     </div>
-    <div id="history"></div>
+    <div id="winningNumbers"></div>
     <script>
-        let count = 0; // 생성된 번호 세트의 개수를 저장할 변수
+        let count = 0;
+        const winningNumbers = [
+            [10, 14, 18, 20, 23, 30], // 역대 당첨 번호 예시 (최신 순)
+            [5, 9, 12, 15, 19, 24]
+            // 추가적인 당첨 번호는 이 배열에 넣으세요.
+        ];
 
         function generateLottoNumbers() {
             const colors = ['#fdd835', '#e53935', '#1e88e5', '#43a047', '#fb8c00', '#8e24aa'];
@@ -58,9 +76,9 @@
             while (lottoNumbers.size < 6) {
                 lottoNumbers.add(Math.floor(Math.random() * 45) + 1);
             }
-            const sortedNumbers = Array.from(lottoNumbers).sort((a, b) => a - b); // 번호를 오름차순으로 정렬
+            const sortedNumbers = Array.from(lottoNumbers).sort((a, b) => a - b);
             const numbersContainer = document.getElementById('lottoNumbers');
-            numbersContainer.innerHTML = ''; // 이전 번호 지우기
+            numbersContainer.innerHTML = '';
             sortedNumbers.forEach(number => {
                 const numberElement = document.createElement('div');
                 numberElement.classList.add('number');
@@ -72,13 +90,25 @@
         }
 
         function recordHistory(numbers) {
-            count++; // 생성된 번호 세트의 개수를 증가
+            count++;
             const historyContainer = document.getElementById('history');
             const entry = document.createElement('div');
             entry.classList.add('history-entry');
-            entry.textContent = count + ' - ' + numbers.join(', '); // 순서 번호와 함께 번호 표시
+            entry.textContent = count + ' - ' + numbers.join(', ');
             historyContainer.appendChild(entry);
         }
+
+        function displayWinningNumbers() {
+            const numbersContainer = document.getElementById('winningNumbers');
+            winningNumbers.forEach((set, index) => {
+                const entry = document.createElement('div');
+                entry.classList.add('winning-entry');
+                entry.textContent = (index + 1) + ' - ' + set.join(', ');
+                numbersContainer.appendChild(entry);
+            });
+        }
+
+        displayWinningNumbers();
     </script>
 </body>
 </html>
