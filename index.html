@@ -29,7 +29,7 @@
             gap: 10px;
             margin-top: 20px;
         }
-        .number {
+        .number, .history-number {
             width: 50px;
             height: 50px;
             display: flex;
@@ -92,7 +92,10 @@
 
         function fetchLottoData() {
             const drawNumber = document.getElementById('drawNumber').value;
-            const url = `https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=${drawNumber}`;
+            const proxyUrl = 'https://cors-anywhere.herokuapp.com/'; // CORS Anywhere 프록시 서버 URL
+            const targetUrl = `https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=${drawNumber}`;
+            const url = proxyUrl + targetUrl; // 프록시를 통해 요청
+
             fetch(url)
             .then(response => response.json())
             .then(data => {
