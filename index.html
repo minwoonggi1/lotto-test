@@ -9,9 +9,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             height: 100vh;
             margin: 0;
-            padding-top: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
         }
         #lottoNumbers {
             display: flex;
@@ -34,9 +36,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            margin-top: 20px;
         }
         .history-entry {
-            margin-top: 10px;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -47,29 +50,33 @@
     </div>
     <div id="history"></div>
     <script>
+        let count = 0; // 생성된 번호 세트의 개수를 저장할 변수
+
         function generateLottoNumbers() {
             const colors = ['#fdd835', '#e53935', '#1e88e5', '#43a047', '#fb8c00', '#8e24aa'];
             const lottoNumbers = new Set();
             while (lottoNumbers.size < 6) {
                 lottoNumbers.add(Math.floor(Math.random() * 45) + 1);
             }
+            const sortedNumbers = Array.from(lottoNumbers).sort((a, b) => a - b); // 번호를 오름차순으로 정렬
             const numbersContainer = document.getElementById('lottoNumbers');
-            numbersContainer.innerHTML = ''; // Clear previous numbers
-            lottoNumbers.forEach(number => {
+            numbersContainer.innerHTML = ''; // 이전 번호 지우기
+            sortedNumbers.forEach(number => {
                 const numberElement = document.createElement('div');
                 numberElement.classList.add('number');
                 numberElement.textContent = number;
                 numberElement.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                 numbersContainer.appendChild(numberElement);
             });
-            recordHistory(Array.from(lottoNumbers));
+            recordHistory(sortedNumbers);
         }
 
         function recordHistory(numbers) {
+            count++; // 생성된 번호 세트의 개수를 증가
             const historyContainer = document.getElementById('history');
             const entry = document.createElement('div');
             entry.classList.add('history-entry');
-            entry.textContent = numbers.join(', ');
+            entry.textContent = count + ' - ' + numbers.join(', '); // 순서 번호와 함께 번호 표시
             historyContainer.appendChild(entry);
         }
     </script>
