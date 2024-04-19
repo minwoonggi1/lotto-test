@@ -60,7 +60,10 @@
     </div>
 
     <script>
+        let count = 0; // 시도 횟수를 저장하는 변수
+
         function generateRandomNumbers() {
+            count++; // 번호 생성 시 마다 카운트 증가
             const colors = ['#fdd835', '#e53935', '#1e88e5', '#43a047', '#fb8c00', '#8e24aa'];
             const numbers = new Set();
             while (numbers.size < 6) {
@@ -81,12 +84,10 @@
 
         function recordHistory(numbers) {
             const historyContainer = document.getElementById('history');
-            numbers.forEach(number => {
-                const numberDiv = document.createElement('div');
-                numberDiv.className = 'number history-number';
-                numberDiv.textContent = number;
-                historyContainer.appendChild(numberDiv);
-            });
+            const entry = document.createElement('div');
+            entry.className = 'history-number';
+            entry.textContent = `${count}번 - ${numbers.join(', ')}`;
+            historyContainer.appendChild(entry);
         }
 
         function fetchLottoData() {
